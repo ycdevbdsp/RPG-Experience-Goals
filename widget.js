@@ -40,8 +40,15 @@ window.addEventListener('onWidgetLoad', async function (obj) {
         goal = await getCounterValue(obj.detail.channel.apiToken);
     }
     setGoal();
-}
-);
+    updateBar(fieldData['startXP']);
+    prevCount = +fieldData['startXP'];
+  
+  	/*$("#xpCount").on('webkitAnimationEnd', function() {
+      console.log('animation ended');
+      $("#xpCount").css('-webkit-animation', 'fadeout 4s linear forwards');
+    }, false);*/
+  
+});
 
 let getCounterValue = apiKey => {
     return new Promise(resolve => {
@@ -66,7 +73,7 @@ window.addEventListener('onSessionUpdate', function (obj) {
             count = obj["detail"]["session"][index]['count'];
         }
     }
-    updateBar(count);
+    //updateBar(count);
     console.log("session updated");
 });
 
@@ -82,7 +89,7 @@ window.addEventListener('onEventReceived', function (obj) {
 
     if (listener === 'subscriber-latest') {
         console.log('new subscriber');
-        const xp = data.amount;
+        let xp = data.amount;
 
         // Determine multiplier
 
@@ -103,34 +110,34 @@ window.addEventListener('onEventReceived', function (obj) {
             // apply tier multiplier
 
             if (data.tier === "prime")
-                xp *= 1.1;
+                xp *= 1;
             else
                 xp *= (data.tier / 1000);  //tiers are 1000, 2000, 3000
         }
+    	addXP(xp);
     }
 
     else if (listener === 'tip-latest') {
-        const xp = data.amount;
+        let xp = data.amount;
         xp *= fieldData['tipWeight'];
         console.log("tip xp = " + xp);
+    	addXP(xp);
     }
 
     else if (listener === 'cheer-latest') {
-        const xp = data.amount;
+        let xp = data.amount;
         xp *= fieldData['cheerWeight'];
         console.log("cheer XP = " + xp);
+      	addXP(xp);
     }
-
-    addXP(xp);
 });
 
 function addXP(count) {
-    if (count === prevCount) return;
     if (count >= goal) {
         if (fieldData['autoIncrement'] > 0 && fieldData.onGoalReach === "increment") {
             goal += fieldData['autoIncrement'];
             setGoal();
-            updateBar(count);
+            updateBar(prevCount + count);
             return;
         } else if (fieldData.onGoalReach === "reset") {
             fieldData.onGoalReach === "reset";
@@ -139,7 +146,7 @@ function addXP(count) {
     }
     clearTimeout(timeout);
     $("body").fadeTo("slow", 1);
-    let percentage = Math.min(100, (count / goal * 100).toPrecision(3));
+    let percentage = Math.min(100, ((prevCount + count) / goal * 100).toPrecision(3));
     $("#bar").css('width', percentage + "%");
     if (fieldData['eventType'] === 'tip') {
         if (count % 1) {
@@ -148,7 +155,13 @@ function addXP(count) {
             count = count.toLocaleString(userLocale, { minimumFractionDigits: 0, style: 'currency', currency: currency })
         }
     }
-    $("#count").html(prevCount + count);
+    xpUp = `+${count}`;
+  	el = $("#xpCount");
+  	xpClone = el.clone(true);
+  	el.before(xpClone);
+    $("." + el.attr("class") + ":last").remove();
+    $("#xpCount").html(xpUp);
+    $("#count").html(+prevCount + count);
     prevCount += count;
     if (fieldData.fadeoutAfter) {
         timeout = setTimeout(() => {
@@ -188,5 +201,4 @@ function updateBar(count) {
             $("body").fadeTo("slow", 0);
         }, fieldData.fadeoutAfter * 1000);
     }
-
 }
