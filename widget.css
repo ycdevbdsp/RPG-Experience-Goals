@@ -4,20 +4,32 @@
 }
 .meter {
     display:{displayBar};
-    height: 25px;  /* Can be anything */
+    height: 15px;  /* Can be anything */
     position: relative;
     background: {{backgroundColor}};
-    -moz-border-radius: 25px;
-    -webkit-border-radius: 25px;
-    border-radius: 25px;
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px;
+    border-radius: 5px;
     padding: 0px;
     box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);
 }
-
+#barBottom {
+    display:{displayBar};
+    height: 5px;  /* Can be anything */
+    position: relative;
+    /*background: {{backgroundColor}};*/
+  	background: {{bottomBarColor}};
+    background-image: {{bottomBarColor}};
+    /*-moz-border-radius: 25px;
+    -webkit-border-radius: 25px;
+    border-radius: 25px;
+    padding: 0px;
+    box-shadow: inset 0 -1px 1px rgba(255,255,255,0.3);*/
+}
 .meter > span {
     display:{displayBar};
     height: 100%;
-    border-radius: 25px;
+    border-radius: 0px;
     background-color: {{barColor1}};
     background-image: linear-gradient(
         center bottom,
@@ -45,8 +57,8 @@
         transparent
     );
     z-index: 1;
-    background-size: 50px 50px;
-    border-radius:25px;
+    background-size: 5px 5px;
+    border-radius:5px;
     overflow: hidden;
 }
 
@@ -57,6 +69,13 @@
     text-align:center;
     font-weight:bold;
 }
+.xplegend{
+    display:{displayLabels};
+    width: 100%;
+    font-size:{{labelSize}}px;
+    text-align:left;
+    font-weight:bold;
+}
 .title{
     width: 100%;
     font-size:{{titleSize}}px;
@@ -64,6 +83,30 @@
     text-align:center;
     font-weight:bold;
   text-shadow: {{shadow}};
+}
+#prefix{
+  	align:left;
+  	width: 100%;
+    font-size:{{labelSize}}px;
+    text-align:left;
+    font-weight:bold;
+  	color:{{xpCountColor}};
+}
+#xpCount{
+  color:{{xpCountColor}};
+  text-shadow: {{shadow}};
+  -webkit-animation: fadeinout 4s linear forwards;
+  width: 100%;
+  font-size:{{labelSize}}px;
+  font-weight:bold;
+}
+@-webkit-keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
+}
+@keyframes fadeinout {
+  0%,100% { opacity: 0; }
+  50% { opacity: 1; }
 }
 #count{
     color:{{valueColor}};

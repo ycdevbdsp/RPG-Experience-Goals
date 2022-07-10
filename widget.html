@@ -1,8 +1,14 @@
 <link href="https://fonts.googleapis.com/css?family={fontName}:400,{fontWeight}" rel="stylesheet">
 <div class="main-container">
     <div class="title">{{titleText}}</div>
-    <div class="meter">
-        <span id="bar" style="width: 25%"></span>
-    </div>
+  	<div class="splegend"><span id="prefix">{xpLabel}</span><span id="xpCount"></span></div>
+    <span>
+      <div class="meter">
+        <span id="bar" style="width: 25%, height: 15px"></span>
+      </div>
+      <div class="barBottom">      
+        <span id="barBottom" style="width: 100%, height: 5px"></span>
+      </div>
+    </span>
     <div class="legend"><span id="count"></span><span id="divider">{divider}</span><span id="goal"></span></div>
 </div>
