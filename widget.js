@@ -88,14 +88,15 @@ window.addEventListener('onEventReceived', function (obj) {
     }
 
     if (listener === 'subscriber-latest') {
-        console.log('new subscriber');
-        let xp = data.amount;
+        // Preserving this as a comment in case it needs to be changed back at any point, but
+        // this prevents resubs from multiplying value based on the number of months
+        
+        //let xp = data.amount;
+        let xp = 1;
 
         // Determine multiplier
 
         if (data.gifted === true) {
-            console.log("gift xp = " + (xp * fieldData['giftSubWeight']));
-
             xp *= fieldData['giftSubWeight'];
         }
         else {
